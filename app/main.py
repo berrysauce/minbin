@@ -56,10 +56,3 @@ async def get_paste(paste_id: str, request: Request):
             "paste_expiry": paste_expiry,
         },
     )
-
-
-@app.get("/health")
-async def get_health():
-    await r.set("health", "ok")
-    msg = await r.get("health")
-    return {"health": msg}
