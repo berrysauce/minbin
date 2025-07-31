@@ -9,21 +9,23 @@ on:
   release:
     types: [published] # Run when a new release is published
 
-permissions:
-  contents: read
-  packages: write
-  id-token: write
-
 env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
 
+
 jobs:
   build:
     if: ${{ !github.event.release.draft }} # Skip draft releases
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      # This is used to complete the identity challenge
+      # with sigstore/fulcio when running outside of PRs.
+      id-token: write
 
     steps:
       - name: Checkout repository
