@@ -1,0 +1,30 @@
+.scrollable::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollable::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+textarea {
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+}
+
+.scrollable {
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+  scrollbar-width: thin;
+}
+
+.scrollable {
+  overflow-y: auto;
+}
+
+.custom-placeholder::placeholder {
+  color: rgba(255,255,255,0.25);
+  opacity: 1;
+}
+

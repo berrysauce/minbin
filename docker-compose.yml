@@ -1,0 +1,22 @@
+services:
+    api:
+        build: .
+        ports:
+            - "8000:8000" # expose API to host
+        depends_on:
+            - dragonfly
+        networks:
+            - backend
+
+    dragonfly:
+        image: docker.dragonflydb.io/dragonflydb/dragonfly
+        container_name: dragonfly
+        ports:
+            - "127.0.0.1:6379:6379" # only accessible from host, not public
+        networks:
+            - backend
+        #command: ["--requirepass", "${DRAGONFLY_PASS}"] # optional, for auth
+
+networks:
+    backend:
+        driver: bridge
