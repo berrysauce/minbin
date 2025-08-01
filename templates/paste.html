@@ -1,125 +1,123 @@
 <!DOCTYPE html>
 <html data-bs-theme="light" lang="en" style="background: #000000;">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        <title>minbin – the minimal, ephemeral pastebin</title>
+        <link rel="canonical" href="https://minb.in/paste.html">
+        <meta property="og:url" content="https://minb.in/paste.html">
+        <meta name="description" content="minbin is a minimal, privacy-focused pastebin service for sharing plain text or code. it's open source, fast, ephemeral, and without clutter.">
+        <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css?h=945fb3ff8106aaf5eda73c29e0d47826">
+        <link rel="stylesheet" href="/assets/css/Funnel%20Sans.css?h=944abf0e8f39d2596b82db9dc841d7fc">
+        <link rel="stylesheet" href="/assets/css/Geist%20Mono.css?h=565175f9bb74ace8ea7c89a0fe742a51">
+        <link rel="stylesheet" href="/assets/css/styles.css?h=f54fffe3509c589adae6adceedf9959b">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    </head>
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>minbin – the minimal, ephemeral pastebin</title>
-    <link rel="canonical" href="https://minb.in/paste.html">
-    <meta property="og:url" content="https://minb.in/paste.html">
-    <meta name="description" content="minbin is a minimal, privacy-focused pastebin service for sharing plain text or code. it's open source, fast, ephemeral, and without clutter.">
-    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css?h=945fb3ff8106aaf5eda73c29e0d47826">
-    <link rel="stylesheet" href="/assets/css/Funnel%20Sans.css?h=944abf0e8f39d2596b82db9dc841d7fc">
-    <link rel="stylesheet" href="/assets/css/Geist%20Mono.css?h=565175f9bb74ace8ea7c89a0fe742a51">
-    <link rel="stylesheet" href="/assets/css/styles.css?h=f54fffe3509c589adae6adceedf9959b">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-</head>
-
-<body style="height: 100vh;font-family: 'Funnel Sans', sans-serif;background: rgb(0,0,0);">
-    <section style="min-height: 100vh;max-width: 100%;">
-        <div class="container d-flex flex-column" style="min-height: 100vh;padding: 0px;margin: 0px;max-width: 100%;">
-            <div class="d-flex flex-row justify-content-center align-items-center" style="padding: 32px;">
-                <a href="/" style="text-decoration: none; color: inherit;">
-                    <img class="img-fluid h-100" width="500" height="102" src="/assets/img/logo-dark.png?h=040b1ce32533b03380283b282aad47a6" style="width: 100px;margin-right: 32px;">
-                </a>
-                <div class="text-end flex-grow-1">
-                    <a class="btn btn-primary" href="/raw/{{ paste_id }}" style="padding: 4px 8px;background: rgba(0,0,0,0);border-style: none;border-radius: 0px;margin-right: 8px;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="margin-top: -4px;margin-right: 8px;font-size: 20px;">
-                            <path d="M4 6H20M4 12H12M4 18H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                        </svg>Raw
+    <body style="height: 100vh;font-family: 'Funnel Sans', sans-serif;background: rgb(0,0,0);">
+        <section style="min-height: 100vh;max-width: 100%;">
+            <div class="container d-flex flex-column" style="min-height: 100vh;padding: 0px;margin: 0px;max-width: 100%;">
+                <div class="d-flex flex-row justify-content-center align-items-center" style="padding: 32px;">
+                    <a href="/" style="text-decoration: none; color: inherit;">
+                        <img class="img-fluid h-100" width="500" height="102" src="/assets/img/logo-dark.png?h=040b1ce32533b03380283b282aad47a6" style="width: 100px;margin-right: 32px;">
                     </a>
-                    <button class="btn btn-primary" type="button" style="padding: 4px 8px;background: rgba(0,0,0,0);border-style: none;border-radius: 0px;margin-right: 8px;" data-bs-target="#share-modal" data-bs-toggle="modal">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="margin-top: -4px;margin-right: 8px;font-size: 20px;">
-                            <path d="M10 6H6C4.89543 6 4 6.89543 4 8V18C4 19.1046 4.89543 20 6 20H16C17.1046 20 18 19.1046 18 18V14M14 4H20M20 4V10M20 4L10 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                        </svg>Share
-                    </button>
-                    <a class="btn btn-primary" href="/" style="padding: 4px 8px;background: rgba(0,0,0,0);border-style: none;border-radius: 0px;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20" fill="none" style="margin-top: -4px;margin-right: 8px;font-size: 20px;">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M11.3006 1.04621C11.7169 1.17743 12 1.56348 12 1.99995V6.99995L16 6.99995C16.3729 6.99995 16.7148 7.20741 16.887 7.53814C17.0592 7.86887 17.0331 8.26794 16.8192 8.57341L9.81924 18.5734C9.56894 18.931 9.11564 19.0849 8.69936 18.9537C8.28309 18.8225 8 18.4364 8 18L8 13H4C3.62713 13 3.28522 12.7925 3.11302 12.4618C2.94083 12.131 2.96694 11.732 3.18077 11.4265L10.1808 1.42649C10.4311 1.06892 10.8844 0.914992 11.3006 1.04621Z" fill="currentColor"></path>
-                        </svg>New
-                    </a>
+                    <div class="text-end flex-grow-1">
+                        <a class="btn btn-primary" href="/raw/{{ paste_id }}" style="padding: 4px 8px;background: rgba(0,0,0,0);border-style: none;border-radius: 0px;margin-right: 8px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="margin-top: -4px;margin-right: 8px;font-size: 20px;">
+                                <path d="M4 6H20M4 12H12M4 18H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>Raw
+                        </a>
+                        <button class="btn btn-primary" type="button" style="padding: 4px 8px;background: rgba(0,0,0,0);border-style: none;border-radius: 0px;margin-right: 8px;" data-bs-target="#share-modal" data-bs-toggle="modal">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="margin-top: -4px;margin-right: 8px;font-size: 20px;">
+                                <path d="M10 6H6C4.89543 6 4 6.89543 4 8V18C4 19.1046 4.89543 20 6 20H16C17.1046 20 18 19.1046 18 18V14M14 4H20M20 4V10M20 4L10 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>Share
+                        </button>
+                        <a class="btn btn-primary" href="/" style="padding: 4px 8px;background: rgba(0,0,0,0);border-style: none;border-radius: 0px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20" fill="none" style="margin-top: -4px;margin-right: 8px;font-size: 20px;">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M11.3006 1.04621C11.7169 1.17743 12 1.56348 12 1.99995V6.99995L16 6.99995C16.3729 6.99995 16.7148 7.20741 16.887 7.53814C17.0592 7.86887 17.0331 8.26794 16.8192 8.57341L9.81924 18.5734C9.56894 18.931 9.11564 19.0849 8.69936 18.9537C8.28309 18.8225 8 18.4364 8 18L8 13H4C3.62713 13 3.28522 12.7925 3.11302 12.4618C2.94083 12.131 2.96694 11.732 3.18077 11.4265L10.1808 1.42649C10.4311 1.06892 10.8844 0.914992 11.3006 1.04621Z" fill="currentColor"></path>
+                            </svg>New
+                        </a>
+                    </div>
                 </div>
-            </div>
-            <div class="d-flex flex-column flex-grow-1" style="padding: 0px 32px;">
-                <form class="d-flex flex-column flex-grow-1" style="background: rgba(255,255,255,0.05);border: 2px solid rgba(255,255,255,0.1) ;border-radius: 0px;">
-                    <textarea class="form-control z-0 flex-grow-1 scrollable" style="resize: none;font-family: 'Geist Mono', monospace;padding: 16px;background: rgba(0,0,0,0);box-shadow: none;outline: none;color: rgb(255,255,255);border-style: none;" placeholder="paste or type here..." readonly="">{{ paste_body }}</textarea
-                </form>
-            </div>
-            <div style="padding: 32px;">
-                <p style="margin-bottom: 16px;font-size: 14px;color: rgba(255,255,255,0.3);"><span style="font-weight: 500;color: rgb(255,255,255);">minbin is a minimal, ephemeral pastebin service.</span>&nbsp;<span>created by <a href="https://berrysauce.dev" style="color: inherit;" target="_blank">berrysauce</a>.</span><br>this service is provided as is, with no guarantees. do not use it to store illegal, sensitive, personal, or confidential information. the operator is not responsible for user-submitted content.<br>no personal data is collected. pastes are anonymous and auto-delete after 1 hour. by using this service, you agree to these terms.</p>
-                <p style="margin-bottom: 0px;font-size: 14px;color: rgba(255,255,255,0.3);"><span style="font-weight: 500;color: rgb(255,255,255);"><img class="img-fluid" src="/assets/img/eu.webp?h=a722428543558d4a0580ae0befc34ecd" style="height: 20px;margin-top: -2px;margin-right: 10px;box-shadow: 0px 0px 20px 0px rgb(1,51,153);">Hosted in Europe</span></p>
-            </div>
+                <div class="d-flex flex-column flex-grow-1" style="padding: 0px 32px;">
+                    <form class="d-flex flex-column flex-grow-1" style="background: rgba(255,255,255,0.05);border: 2px solid rgba(255,255,255,0.1) ;border-radius: 0px;">
+                        <textarea class="form-control z-0 flex-grow-1 scrollable" style="resize: none;font-family: 'Geist Mono', monospace;padding: 16px;background: rgba(0,0,0,0);box-shadow: none;outline: none;color: rgb(255,255,255);border-style: none;" placeholder="paste or type here..." readonly="">{{ paste_body }}</textarea
+                    </form>
+                </div>
+                <div style="padding: 32px;">
+                    <p style="margin-bottom: 16px;font-size: 14px;color: rgba(255,255,255,0.3);"><span style="font-weight: 500;color: rgb(255,255,255);">minbin is a minimal, ephemeral pastebin service.</span>&nbsp;<span>created by <a href="https://berrysauce.dev" style="color: inherit;" target="_blank">berrysauce</a>.</span><br>this service is provided as is, with no guarantees. do not use it to store illegal, sensitive, personal, or confidential information. the operator is not responsible for user-submitted content.<br>no personal data is collected. pastes are anonymous and auto-delete after 1 hour. by using this service, you agree to these terms.</p>
+                    <p style="margin-bottom: 0px;font-size: 14px;color: rgba(255,255,255,0.3);"><span style="font-weight: 500;color: rgb(255,255,255);"><img class="img-fluid" src="/assets/img/eu.webp?h=a722428543558d4a0580ae0befc34ecd" style="height: 20px;margin-top: -2px;margin-right: 10px;box-shadow: 0px 0px 20px 0px rgb(1,51,153);">Hosted in Europe</span></p>
+                </div>
 
-            <!-- share modal -->
-            <div class="modal fade" role="dialog" tabindex="-1" id="share-modal">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-body" style="background: #000000;border: 2px solid rgba(255,255,255,0.1) ;border-radius: 0px;">
-                            <div class="d-flex flex-row">
-                                <div id="qrcode" style="padding: 8px; margin-right: 16px; background: #fff;"></div>
-                                <script>
-                                    var qrcode = new QRCode("qrcode", {
-                                        text: "https://{{ paste_url }}",
-                                        width: 100,
-                                        height: 100,
-                                        colorDark: "#000000",
-                                        colorLight: "#ffffff",
-                                        correctLevel: QRCode.CorrectLevel.L,
-                                    });
-                                </script>
-                                <div class="flex-grow-1 align-content-center">
-                                    <p id="share-url" style="color: rgb(255,255,255);font-family: 'Geist Mono', monospace;border-width: 2px;border-style: solid;padding: 6px 12px;margin-bottom: 8px;transition: color 0.25s ease;">{{ paste_url }}
-                                        <button class="btn btn-primary float-end" id="copy-button" type="button" style="margin-top: 0px;margin-right: -6px;padding: 0px;border-radius: 0px;border-style: none;background: rgba(255,255,255,0);transition: color 0.25s ease;">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="margin-top: -1px;font-size: 20px;">
-                                                <path d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V18M8 5C8 6.10457 8.89543 7 10 7H12C13.1046 7 14 6.10457 14 5M8 5C8 3.89543 8.89543 3 10 3H12C13.1046 3 14 3.89543 14 5M14 5H16C17.1046 5 18 5.89543 18 7V10M20 14H10M10 14L13 11M10 14L13 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            </svg>
-                                        </button>
-                                    </p>
-                                    <p style="color: rgba(255,255,255,0.5);margin-bottom: 0px;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="margin-top: -4px;margin-right: 8px;font-size: 20px;">
-                                            <path d="M12 8V12L15 15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        </svg>Expires in {{ paste_expiry }} min.
-                                    </p>
+                <!-- share modal -->
+                <div class="modal fade" role="dialog" tabindex="-1" id="share-modal">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body" style="background: #000000;border: 2px solid rgba(255,255,255,0.1) ;border-radius: 0px;">
+                                <div class="d-flex flex-row">
+                                    <div id="qrcode" style="padding: 8px; margin-right: 16px; background: #fff;"></div>
                                     <script>
-                                        const button = document.getElementById("copy-button");
-                                        const text = document.getElementById("share-url");
-
-                                        button.addEventListener("click", async () => {
-                                            try {
-                                                // try using the modern Clipboard API
-                                                await navigator.clipboard.writeText("https://{{ paste_url }}");
-                                            } catch (err) {
-                                                // fallback for older browsers
-                                                const textarea = document.createElement('textarea');
-                                                textarea.value = "https://{{ paste_url }}";
-                                                textarea.style.position = "fixed"; // prevent scrolling to bottom
-                                                textarea.style.opacity = "0"; // hide the textarea
-                                                document.body.appendChild(textarea);
-                                                textarea.focus();
-                                                textarea.select();
-                                                document.execCommand("copy");
-                                            }
-
-                                            // change colors
-                                            button.style.color = "#2fd588";
-                                            text.style.color = "#2fd588";
-
-                                            // reset styles after 1 second
-                                            setTimeout(() => {
-                                                button.style.color = "#fff";
-                                                text.style.color = "#fff";
-                                            }, 1000);
+                                        var qrcode = new QRCode("qrcode", {
+                                            text: "https://{{ paste_url }}",
+                                            width: 100,
+                                            height: 100,
+                                            colorDark: "#000000",
+                                            colorLight: "#ffffff",
+                                            correctLevel: QRCode.CorrectLevel.L,
                                         });
                                     </script>
+                                    <div class="flex-grow-1 align-content-center">
+                                        <p id="share-url" style="color: rgb(255,255,255);font-family: 'Geist Mono', monospace;border-width: 2px;border-style: solid;padding: 6px 12px;margin-bottom: 8px;transition: color 0.25s ease;">{{ paste_url }}
+                                            <button class="btn btn-primary float-end" id="copy-button" type="button" style="margin-top: 0px;margin-right: -6px;padding: 0px;border-radius: 0px;border-style: none;background: rgba(255,255,255,0);transition: color 0.25s ease;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="margin-top: -1px;font-size: 20px;">
+                                                    <path d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V18M8 5C8 6.10457 8.89543 7 10 7H12C13.1046 7 14 6.10457 14 5M8 5C8 3.89543 8.89543 3 10 3H12C13.1046 3 14 3.89543 14 5M14 5H16C17.1046 5 18 5.89543 18 7V10M20 14H10M10 14L13 11M10 14L13 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                </svg>
+                                            </button>
+                                        </p>
+                                        <p style="color: rgba(255,255,255,0.5);margin-bottom: 0px;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="margin-top: -4px;margin-right: 8px;font-size: 20px;">
+                                                <path d="M12 8V12L15 15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                            </svg>Expires in {{ paste_expiry }} min.
+                                        </p>
+                                        <script>
+                                            const button = document.getElementById("copy-button");
+                                            const text = document.getElementById("share-url");
+
+                                            button.addEventListener("click", async () => {
+                                                try {
+                                                    // try using the modern Clipboard API
+                                                    await navigator.clipboard.writeText("https://{{ paste_url }}");
+                                                } catch (err) {
+                                                    // fallback for older browsers
+                                                    const textarea = document.createElement('textarea');
+                                                    textarea.value = "https://{{ paste_url }}";
+                                                    textarea.style.position = "fixed"; // prevent scrolling to bottom
+                                                    textarea.style.opacity = "0"; // hide the textarea
+                                                    document.body.appendChild(textarea);
+                                                    textarea.focus();
+                                                    textarea.select();
+                                                    document.execCommand("copy");
+                                                }
+
+                                                // change colors
+                                                button.style.color = "#2fd588";
+                                                text.style.color = "#2fd588";
+
+                                                // reset styles after 1 second
+                                                setTimeout(() => {
+                                                    button.style.color = "#fff";
+                                                    text.style.color = "#fff";
+                                                }, 1000);
+                                            });
+                                        </script>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-    <script src="/assets/bootstrap/js/bootstrap.min.js?h=2cf0875e1daf356bc4e64c053e7a4150"></script>
-</body>
-
+        </section>
+        <script src="/assets/bootstrap/js/bootstrap.min.js?h=2cf0875e1daf356bc4e64c053e7a4150"></script>
+    </body>
 </html>

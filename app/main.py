@@ -6,9 +6,9 @@ from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
+from config import Config
 from .utils.db import get_redis_client
 from .utils.other import get_version
-from .config import Config
 
 app = FastAPI(
     title="minbin",
@@ -27,11 +27,15 @@ templates = Jinja2Templates(directory="templates")
 
 @app.get("/", response_class=HTMLResponse)
 async def get_index(request: Request):
+    """Get the index page."""
+
     return templates.TemplateResponse(request=request, name="index.html")
 
 
 @app.post("/", response_class=PlainTextResponse, status_code=status.HTTP_201_CREATED)
 async def post_paste(request: Request):
+    """Create a new paste."""
+
     # parse paste body
     paste_body = await request.body()
     if not paste_body or len(paste_body) > Config.MAX_PASTE_SIZE:
@@ -45,11 +49,13 @@ async def post_paste(request: Request):
     paste_expiry = Config.PASTE_EXPIRY * 60  # convert minutes to seconds
     await r.set(paste_id, paste_body.decode(), ex=paste_expiry)
 
-    return f"{paste_id}"
+    return f"{Config.APP_DOMAIN}/{paste_id}"
 
 
 @app.get("/raw/{paste_id}", response_class=PlainTextResponse)
-async def get_raw_paste(paste_id: str, request: Request):
+async def get_raw_paste(paste_id: str):
+    """Get the raw paste content by ID."""
+
     paste_body = await r.get(paste_id)
 
     if paste_body is None:
@@ -63,6 +69,8 @@ async def get_raw_paste(paste_id: str, request: Request):
 
 @app.get("/{paste_id}", response_class=HTMLResponse)
 async def get_paste(paste_id: str, request: Request):
+    """Get the paste content by ID."""
+
     paste_body = await r.get(paste_id)
     paste_expiry = await r.ttl(paste_id)
 

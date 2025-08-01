@@ -1,100 +1,133 @@
 <!DOCTYPE html>
 <html data-bs-theme="light" lang="en" style="background: #000000;">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+        <title>minbin – the minimal, ephemeral pastebin</title>
+        <link rel="canonical" href="https://minb.in/" />
+        <meta property="og:url" content="https://minb.in/" />
+        <meta name="description" content="minbin is a minimal, privacy-focused pastebin service for sharing plain text or code. it's open source, fast, ephemeral, and without clutter." />
+        <script type="application/ld+json">
+            {
+                "@context": "http://schema.org",
+                "@type": "WebSite",
+                "name": "minbin",
+                "url": "https://minb.in"
+            }
+        </script>
+        <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css?h=945fb3ff8106aaf5eda73c29e0d47826" />
+        <link rel="stylesheet" href="/assets/css/Funnel%20Sans.css?h=944abf0e8f39d2596b82db9dc841d7fc" />
+        <link rel="stylesheet" href="/assets/css/Geist%20Mono.css?h=565175f9bb74ace8ea7c89a0fe742a51" />
+        <link rel="stylesheet" href="/assets/css/styles.css?h=f54fffe3509c589adae6adceedf9959b" />
+    </head>
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>minbin – the minimal, ephemeral pastebin</title>
-    <link rel="canonical" href="https://minb.in/">
-    <meta property="og:url" content="https://minb.in/">
-    <meta name="description" content="minbin is a minimal, privacy-focused pastebin service for sharing plain text or code. it's open source, fast, ephemeral, and without clutter.">
-    <script type="application/ld+json">
-        {
-            "@context": "http://schema.org",
-            "@type": "WebSite",
-            "name": "minbin",
-            "url": "https://minb.in"
-        }
-    </script>
-    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css?h=945fb3ff8106aaf5eda73c29e0d47826">
-    <link rel="stylesheet" href="/assets/css/Funnel%20Sans.css?h=944abf0e8f39d2596b82db9dc841d7fc">
-    <link rel="stylesheet" href="/assets/css/Geist%20Mono.css?h=565175f9bb74ace8ea7c89a0fe742a51">
-    <link rel="stylesheet" href="/assets/css/styles.css?h=f54fffe3509c589adae6adceedf9959b">
-</head>
-
-<body style="height: 100vh;font-family: 'Funnel Sans', sans-serif;background: rgb(0,0,0);">
-    <section style="min-height: 100vh;max-width: 100%;">
-        <div class="container d-flex flex-column" style="min-height: 100vh;padding: 0px;margin: 0px;max-width: 100%;">
-            <div class="d-flex flex-row justify-content-center align-items-center" style="padding: 32px;">
-                <a href="/" style="text-decoration: none; color: inherit;">
-                    <img class="img-fluid h-100" width="500" height="102" src="/assets/img/logo-dark.png?h=040b1ce32533b03380283b282aad47a6" style="width: 100px;margin-right: 32px;">
-                </a>
-                <div class="text-end flex-grow-1">
-                    <a href="/openapi" class="btn btn-primary" style="padding: 4px 8px;background: rgba(0,0,0,0);border-style: none;border-radius: 0px;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="margin-top: -4px;margin-right: 8px;font-size: 20px;">
-                            <path d="M10 20L14 4M18 8L22 12L18 16M6 16L2 12L6 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                        </svg>API
+    <body style="height: 100vh; font-family: 'Funnel Sans', sans-serif; background: rgb(0, 0, 0);">
+        <section style="min-height: 100vh; max-width: 100%;">
+            <div class="container d-flex flex-column" style="min-height: 100vh; padding: 0px; margin: 0px; max-width: 100%;">
+                <div class="d-flex flex-row justify-content-center align-items-center" style="padding: 32px;">
+                    <a href="/" style="text-decoration: none; color: inherit;">
+                        <img class="img-fluid h-100" width="500" height="102" src="/assets/img/logo-dark.png?h=040b1ce32533b03380283b282aad47a6" style="width: 100px; margin-right: 32px;" />
                     </a>
+                    <div class="text-end flex-grow-1">
+                        <a href="/openapi" class="btn btn-primary" style="padding: 4px 8px; background: rgba(0, 0, 0, 0); border-style: none; border-radius: 0px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="margin-top: -4px; margin-right: 8px; font-size: 20px;">
+                                <path d="M10 20L14 4M18 8L22 12L18 16M6 16L2 12L6 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                            API
+                        </a>
+                    </div>
                 </div>
-            </div>
-            <div class="d-flex flex-column flex-grow-1" style="padding: 0px 32px;">
-                <form class="d-flex flex-column flex-grow-1" id="paste-form" style="background: rgba(255,255,255,0.05);border: 2px solid rgba(255,255,255,0.1) ;border-radius: 0px;">
-                    <textarea class="form-control z-0 flex-grow-1 scrollable custom-placeholder" id="paste-content" style="resize: none;font-family: 'Geist Mono', monospace;padding: 16px;background: rgba(0,0,0,0);box-shadow: none;outline: none;color: rgb(255,255,255);border-style: none;" placeholder="paste or type here..."></textarea>
-                    <div class="text-end z-1" style="margin-bottom: -2px;margin-right: -2px;margin-top: -48px;">
-                        <button class="btn btn-primary text-end" id="paste-button" type="button" style="background: rgb(13,13,13);border-radius: 0px;padding: 12px 24px;margin-right: -4px;color: rgba(255,255,255,0.5);font-weight: 500;border: 2px solid rgba(255,255,255,0.1);">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20" fill="none" style="margin-top: -4px;margin-right: 8px;font-size: 20px;">
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M8 4C6.34315 4 5 5.34315 5 7V11C5 13.7614 7.23858 16 10 16C12.7614 16 15 13.7614 15 11V7C15 6.44772 15.4477 6 16 6C16.5523 6 17 6.44772 17 7V11C17 14.866 13.866 18 10 18C6.13401 18 3 14.866 3 11V7C3 4.23858 5.23858 2 8 2C10.7614 2 13 4.23858 13 7V11C13 12.6569 11.6569 14 10 14C8.34315 14 7 12.6569 7 11V7C7 6.44772 7.44772 6 8 6C8.55228 6 9 6.44772 9 7V11C9 11.5523 9.44772 12 10 12C10.5523 12 11 11.5523 11 11V7C11 5.34315 9.65685 4 8 4Z" fill="currentColor"></path>
-                            </svg>Paste
-                        </button>
-                        <button class="btn btn-primary text-end" type="submit" style="background: rgb(13,13,13);border-radius: 0px;padding: 12px 24px;color: rgb(255,255,255);font-weight: 500;margin-left: -2px;border: 2px solid rgba(255,255,255,0.1) ;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20" fill="none" style="margin-top: -4px;margin-right: 8px;font-size: 20px;">
-                                <path d="M10.8944 2.55279C10.725 2.214 10.3788 2 10 2C9.62124 2 9.27498 2.214 9.10558 2.55279L2.10558 16.5528C1.92823 16.9075 1.97724 17.3335 2.2305 17.6386C2.48376 17.9438 2.89342 18.0705 3.27473 17.9615L8.27472 16.533C8.70402 16.4103 9 16.0179 9 15.5714V11C9 10.4477 9.44772 10 10 10C10.5523 10 11 10.4477 11 11V15.5714C11 16.0179 11.296 16.4103 11.7253 16.533L16.7253 17.9615C17.1066 18.0705 17.5163 17.9438 17.7695 17.6386C18.0228 17.3335 18.0718 16.9075 17.8944 16.5528L10.8944 2.55279Z" fill="currentColor"></path>
-                            </svg>Publish
-                        </button>
-                        <script>
-                            const button = document.getElementById("paste-button");
-                            const textarea = document.getElementById("paste-content");
+                <div class="d-flex flex-column flex-grow-1" style="padding: 0px 32px;">
+                    <form class="d-flex flex-column flex-grow-1" id="paste-form" style="background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 0px;">
+                        <textarea
+                            class="form-control z-0 flex-grow-1 scrollable custom-placeholder"
+                            id="paste-content"
+                            style="resize: none; font-family: 'Geist Mono', monospace; padding: 16px; background: rgba(0, 0, 0, 0); box-shadow: none; outline: none; color: rgb(255, 255, 255); border-style: none;"
+                            placeholder="paste or type here..."
+                        ></textarea>
+                        <div class="text-end z-1" style="margin-bottom: -2px; margin-right: -2px; margin-top: -48px;">
+                            <button
+                                class="btn btn-primary text-end"
+                                id="paste-button"
+                                type="button"
+                                style="background: rgb(13, 13, 13); border-radius: 0px; padding: 12px 24px; margin-right: -4px; color: rgba(255, 255, 255, 0.5); font-weight: 500; border: 2px solid rgba(255, 255, 255, 0.1);"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20" fill="none" style="margin-top: -4px; margin-right: 8px; font-size: 20px;">
+                                    <path
+                                        fill-rule="evenodd"
+                                        clip-rule="evenodd"
+                                        d="M8 4C6.34315 4 5 5.34315 5 7V11C5 13.7614 7.23858 16 10 16C12.7614 16 15 13.7614 15 11V7C15 6.44772 15.4477 6 16 6C16.5523 6 17 6.44772 17 7V11C17 14.866 13.866 18 10 18C6.13401 18 3 14.866 3 11V7C3 4.23858 5.23858 2 8 2C10.7614 2 13 4.23858 13 7V11C13 12.6569 11.6569 14 10 14C8.34315 14 7 12.6569 7 11V7C7 6.44772 7.44772 6 8 6C8.55228 6 9 6.44772 9 7V11C9 11.5523 9.44772 12 10 12C10.5523 12 11 11.5523 11 11V7C11 5.34315 9.65685 4 8 4Z"
+                                        fill="currentColor"
+                                    ></path>
+                                </svg>
+                                Paste
+                            </button>
+                            <button
+                                class="btn btn-primary text-end"
+                                type="submit"
+                                style="background: rgb(13, 13, 13); border-radius: 0px; padding: 12px 24px; color: rgb(255, 255, 255); font-weight: 500; margin-left: -2px; border: 2px solid rgba(255, 255, 255, 0.1);"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20" fill="none" style="margin-top: -4px; margin-right: 8px; font-size: 20px;">
+                                    <path
+                                        d="M10.8944 2.55279C10.725 2.214 10.3788 2 10 2C9.62124 2 9.27498 2.214 9.10558 2.55279L2.10558 16.5528C1.92823 16.9075 1.97724 17.3335 2.2305 17.6386C2.48376 17.9438 2.89342 18.0705 3.27473 17.9615L8.27472 16.533C8.70402 16.4103 9 16.0179 9 15.5714V11C9 10.4477 9.44772 10 10 10C10.5523 10 11 10.4477 11 11V15.5714C11 16.0179 11.296 16.4103 11.7253 16.533L16.7253 17.9615C17.1066 18.0705 17.5163 17.9438 17.7695 17.6386C18.0228 17.3335 18.0718 16.9075 17.8944 16.5528L10.8944 2.55279Z"
+                                        fill="currentColor"
+                                    ></path>
+                                </svg>
+                                Publish
+                            </button>
+                            <script>
+                                const button = document.getElementById("paste-button");
+                                const textarea = document.getElementById("paste-content");
 
-                            button.addEventListener("click", async () => {
-                                try {
-                                    const text = await navigator.clipboard.readText();
-                                    textarea.value = text;
-                                } catch (err) {
-                                    console.error("Clipboard paste failed:", err);
+                                button.addEventListener("click", async () => {
+                                    try {
+                                        const text = await navigator.clipboard.readText();
+                                        textarea.value = text;
+                                    } catch (err) {
+                                        console.error("Clipboard paste failed:", err);
+                                    }
+                                });
+                            </script>
+                        </div>
+                    </form>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", () => {
+                            document.getElementById("paste-form").addEventListener("submit", async (e) => {
+                                e.preventDefault();
+                                const text = document.getElementById("paste-content").value;
+
+                                const response = await fetch("/", {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "text/plain",
+                                    },
+                                    body: text,
+                                });
+
+                                if (response.status == 201) {
+                                    // http success (created)
+                                    const result = await response.text();
+                                    window.location.replace("https://" + result);
                                 }
                             });
-                        </script>
-                    </div>
-                </form>
-                <script>
-                    document.addEventListener("DOMContentLoaded", () => {
-                        document.getElementById("paste-form").addEventListener("submit", async (e) => {
-                            e.preventDefault();
-                            const text = document.getElementById("paste-content").value;
-
-                            const response = await fetch("/", {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "text/plain"
-                                },
-                                body: text
-                            });
-
-                            if (response.status == 201) { // http success (created)
-                                const result = await response.text();
-                                window.location.replace("/" + result);
-                            }
                         });
-                    });
-                </script>
+                    </script>
+                </div>
+                <div style="padding: 32px;">
+                    <p style="margin-bottom: 16px; font-size: 14px; color: rgba(255, 255, 255, 0.3);">
+                        <span style="font-weight: 500; color: rgb(255, 255, 255);">minbin is a minimal, ephemeral pastebin service.</span>&nbsp;
+                        <span>created by <a href="https://berrysauce.dev" style="color: inherit;" target="_blank">berrysauce</a>.</span><br />
+                        this service is provided as is, with no guarantees. do not use it to store illegal, sensitive, personal, or confidential information. the operator is not responsible for user-submitted content.<br />
+                        no personal data is collected. pastes are anonymous and auto-delete after 1 hour. by using this service, you agree to these terms.
+                    </p>
+                    <p style="margin-bottom: 0px; font-size: 14px; color: rgba(255, 255, 255, 0.3);">
+                        <span style="font-weight: 500; color: rgb(255, 255, 255);">
+                            <img class="img-fluid" src="/assets/img/eu.webp?h=a722428543558d4a0580ae0befc34ecd" style="height: 20px; margin-top: -2px; margin-right: 10px; box-shadow: 0px 0px 20px 0px rgb(1, 51, 153);" />Hosted in Europe
+                        </span>
+                    </p>
+                </div>
             </div>
-            <div style="padding: 32px;">
-                <p style="margin-bottom: 16px;font-size: 14px;color: rgba(255,255,255,0.3);"><span style="font-weight: 500;color: rgb(255,255,255);">minbin is a minimal, ephemeral pastebin service.</span>&nbsp;<span>created by <a href="https://berrysauce.dev" style="color: inherit;" target="_blank">berrysauce</a>.</span><br>this service is provided as is, with no guarantees. do not use it to store illegal, sensitive, personal, or confidential information. the operator is not responsible for user-submitted content.<br>no personal data is collected. pastes are anonymous and auto-delete after 1 hour. by using this service, you agree to these terms.</p>
-                <p style="margin-bottom: 0px;font-size: 14px;color: rgba(255,255,255,0.3);"><span style="font-weight: 500;color: rgb(255,255,255);"><img class="img-fluid" src="/assets/img/eu.webp?h=a722428543558d4a0580ae0befc34ecd" style="height: 20px;margin-top: -2px;margin-right: 10px;box-shadow: 0px 0px 20px 0px rgb(1,51,153);">Hosted in Europe</span></p>
-            </div>
-        </div>
-    </section>
-    <script src="/assets/bootstrap/js/bootstrap.min.js?h=2cf0875e1daf356bc4e64c053e7a4150"></script>
-</body>
-
+        </section>
+        <script src="/assets/bootstrap/js/bootstrap.min.js?h=2cf0875e1daf356bc4e64c053e7a4150"></script>
+    </body>
 </html>
