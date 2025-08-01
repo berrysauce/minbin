@@ -1,4 +1,4 @@
-import os
+import uuid
 
 from fastapi import FastAPI, Request, status
 from fastapi.exceptions import HTTPException
@@ -41,7 +41,7 @@ async def post_paste(request: Request):
         )
 
     # generate paste ID, set expiry, and store in Redis
-    paste_id = os.urandom(2).hex()
+    paste_id = str(uuid.uuid4())[:4]
     paste_expiry = Config.PASTE_EXPIRY * 60  # convert minutes to seconds
     await r.set(paste_id, paste_body.decode(), ex=paste_expiry)
 
@@ -73,7 +73,6 @@ async def get_paste(paste_id: str, request: Request):
         return templates.TemplateResponse(
             request=request,
             name="404.html",
-            context={"paste_id": paste_id},
             status_code=404,
         )
 
@@ -81,6 +80,7 @@ async def get_paste(paste_id: str, request: Request):
         request=request,
         name="paste.html",
         context={
+            "paste_id": paste_id,
             "paste_url": f"{Config.APP_DOMAIN}/{paste_id}",
             "paste_body": paste_body,
             "paste_expiry": paste_expiry,
