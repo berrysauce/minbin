@@ -10,6 +10,7 @@ a minimal, ephemeral pastebin service.
 
 [![CodeQL](https://github.com/berrysauce/minbin/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/berrysauce/minbin/actions/workflows/github-code-scanning/codeql)
 [![Pylint](https://github.com/berrysauce/minbin/actions/workflows/pylint.yml/badge.svg)](https://github.com/berrysauce/minbin/actions/workflows/pylint.yml)
+![Uptime](https://uptime.berrysauce.dev/api/badge/10/uptime)
 ![GitHub repo size](https://img.shields.io/github/repo-size/berrysauce/minbin)
 
 ---
