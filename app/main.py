@@ -6,9 +6,9 @@ from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from config import Config
-from .utils.db import get_redis_client
-from .utils.other import get_version
+from app.config import Config
+from app.utils.db import get_redis_client
+from app.utils.other import get_version
 
 app = FastAPI(
     title="minbin",
