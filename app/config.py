@@ -16,5 +16,6 @@ class Config:
     DB_USER = os.getenv("DB_USER", None)
     DB_PASS = os.getenv("DB_PASS", None)
 
-    # cache expiry
-    DEFAULT_EXPIRY = int(os.getenv("DEFAULT_EXPIRY", 60))  # default 1 minute
+    # paste settings
+    PASTE_EXPIRY = int(os.getenv("PASTE_EXPIRY", 60))  # default 1 minute
+    MAX_PASTE_SIZE = int(os.getenv("MAX_PASTE_SIZE", 1024 * 1024 * 25))  # default 25 MB
