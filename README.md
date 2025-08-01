@@ -1,7 +1,7 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/berrysauce/minbin/refs/heads/main/templates/assets/img/logo-dark.png">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/berrysauce/minbin/refs/heads/main/templates/assets/img/logo-dark.png">
-  <img alt="minbin" src="https://raw.githubusercontent.com/berrysauce/minbin/refs/heads/main/templates/assets/img/logo-dark.png" style="width: 150px; height: auto;"
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/berrysauce/minbin/refs/heads/main/templates/assets/img/logo-dark.webp">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/berrysauce/minbin/refs/heads/main/templates/assets/img/logo.webp">
+  <img alt="minbin" src="https://raw.githubusercontent.com/berrysauce/minbin/refs/heads/main/templates/assets/img/logo-dark.webp" style="width: 150px; height: auto;"
 >
 </picture>
 <br>
