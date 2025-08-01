@@ -8,18 +8,22 @@
 
 a minimal, ephemeral pastebin service.
 
+<br>
+
 [![CodeQL](https://github.com/berrysauce/minbin/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/berrysauce/minbin/actions/workflows/github-code-scanning/codeql)
 [![Pylint](https://github.com/berrysauce/minbin/actions/workflows/pylint.yml/badge.svg)](https://github.com/berrysauce/minbin/actions/workflows/pylint.yml)
 ![Uptime](https://uptime.berrysauce.dev/api/badge/10/uptime)
 ![GitHub repo size](https://img.shields.io/github/repo-size/berrysauce/minbin)
 
----
+<br>
 
 minbin is a minimal, ephemeral pastebin service built with simplicity and privacy in mind. it's self-hostable, open source, and ideal for quick, temporary sharing of snippets, logs, or notes.
 
 pastes expire automatically after 1 hour, or immediately after being viewed (optional). you can view pastes through a clean HTML interface or directly as raw plaintext. a QR code is generated for each paste to make sharing even easier.
 
 **→ check it out at [minb.in](https://minb.in/)**
+
+<br>
 
 ### features
 
