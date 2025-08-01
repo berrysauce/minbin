@@ -48,6 +48,19 @@ async def post_paste(request: Request):
     return f"{paste_id}"
 
 
+@app.get("/raw/{paste_id}", response_class=PlainTextResponse)
+async def get_raw_paste(paste_id: str, request: Request):
+    paste_body = await r.get(paste_id)
+
+    if paste_body is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Paste with ID '{paste_id}' not found.",
+        )
+
+    return paste_body
+
+
 @app.get("/{paste_id}", response_class=HTMLResponse)
 async def get_paste(paste_id: str, request: Request):
     paste_body = await r.get(paste_id)
@@ -73,16 +86,3 @@ async def get_paste(paste_id: str, request: Request):
             "paste_expiry": paste_expiry,
         },
     )
-
-
-@app.get("/raw/{paste_id}", response_class=PlainTextResponse)
-async def get_raw_paste(paste_id: str, request: Request):
-    paste_body = await r.get(paste_id)
-
-    if paste_body is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Paste with ID '{paste_id}' not found.",
-        )
-
-    return paste_body.decode()
