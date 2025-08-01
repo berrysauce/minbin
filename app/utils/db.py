@@ -1,3 +1,9 @@
+"""
+app/utils/db.py
+
+Utility functions for database interactions.
+"""
+
 import redis.asyncio as redis
 
 from app.config import Config
@@ -18,8 +24,6 @@ def get_redis_client():
             password=str(Config.DB_PASS),
             decode_responses=True,
         )
-    else:
-        # connect without username and password
-        return redis.Redis(
-            host=Config.DB_HOST, port=Config.DB_PORT, decode_responses=True
-        )
+
+    # connect without username and password
+    return redis.Redis(host=Config.DB_HOST, port=Config.DB_PORT, decode_responses=True)

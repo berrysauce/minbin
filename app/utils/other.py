@@ -1,3 +1,9 @@
+"""
+app/utils/other.py
+
+Utility functions for the application.
+"""
+
 import toml
 
 

@@ -1,3 +1,7 @@
+"""
+minbin - a minimal, ephemeral pastebin service
+"""
+
 import uuid
 
 from fastapi import FastAPI, Request, status

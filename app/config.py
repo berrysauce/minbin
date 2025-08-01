@@ -1,4 +1,8 @@
-# app/config.py
+"""
+app/config.py
+
+Configuration settings for the minbin application.
+"""
 
 import os
 from dotenv import load_dotenv
