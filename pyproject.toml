@@ -1,6 +1,6 @@
 [project]
 name = "minbin"
-version = "0.1.0"
+version = "0.1.2"
 description = "a minimal, ephemeral pastebin service."
 readme = "README.md"
 requires-python = ">=3.12"

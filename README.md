@@ -57,10 +57,10 @@ minbin can be self-hosted by deploying it as a Docker container [(see GitHub pac
 | `APP_DOMAIN`     | public domain used in generated links | `minb.in`          |
 | `DB_HOST`        | redis hostname or container name      | `dragonfly`        |
 | `DB_PORT`        | redis port                            | `6379`             |
-| `DB_USER`        | redis username (if using Redis ACL)   | *(optional)*       |
+| `DB_USER`        | redis username                        | *(optional)*       |
 | `DB_PASS`        | redis password                        | *(optional)*       |
 | `PASTE_EXPIRY`   | paste expiration time in **minutes**  | `60` (1 hour)      |
-| `MAX_PASTE_SIZE` | maximum paste size in **bytes**       | `26214400` (25 MB) |
+| `MAX_PASTE_SIZE` | maximum paste size in **bytes**       | `5242880` (5 MB)   |
 
 you can override these by passing them into Docker or setting them in your hosting environment. the standard configuration uses [DragonflyDB](https://www.dragonflydb.io/docs/getting-started) for the database, but any Redis-compatible database should do. 
 

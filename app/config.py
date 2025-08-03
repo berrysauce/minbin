@@ -25,5 +25,5 @@ class Config:
     # paste settings
     PASTE_EXPIRY = int(os.getenv("PASTE_EXPIRY", "60"))  # default 1 minute
     MAX_PASTE_SIZE = int(
-        os.getenv("MAX_PASTE_SIZE", str(1024 * 1024 * 25))
-    )  # default 25 MB
+        os.getenv("MAX_PASTE_SIZE", str(1024 * 1024 * 5))
+    )  # default 5 MB

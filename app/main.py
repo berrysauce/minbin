@@ -2,9 +2,11 @@
 minbin - a minimal, ephemeral pastebin service
 """
 
-import uuid
+import os
+import json
+from typing import Optional
 
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI, Request, status, Query
 from fastapi.exceptions import HTTPException
 from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
@@ -16,7 +18,6 @@ from app.utils.other import get_version
 
 app = FastAPI(
     title="minbin",
-    summary="a minimal, ephemeral pastebin service",
     description="a minimal, ephemeral pastebin service",
     version=get_version(),
     openapi_url="/openapi",
@@ -37,7 +38,13 @@ async def get_index(request: Request):
 
 
 @app.post("/", response_class=PlainTextResponse, status_code=status.HTTP_201_CREATED)
-async def post_paste(request: Request):
+async def post_paste(
+    request: Request,
+    once: Optional[str] = Query(
+        default=None,
+        description="If true, the paste will self-destruct after one view.",
+    ),
+):
     """Create a new paste."""
 
     # parse paste body
@@ -49,9 +56,15 @@ async def post_paste(request: Request):
         )
 
     # generate paste ID, set expiry, and store in Redis
-    paste_id = str(uuid.uuid4())[:4]
+    paste_id = os.urandom(2).hex()  # generate a random 2-byte hex ID
     paste_expiry = Config.PASTE_EXPIRY * 60  # convert minutes to seconds
-    await r.set(paste_id, paste_body.decode(), ex=paste_expiry)
+    paste_content = json.dumps(
+        {
+            "body": paste_body.decode(),
+            "once": bool(once is not None),
+        }
+    )
+    await r.set(paste_id, paste_content, ex=paste_expiry)
 
     return f"{Config.APP_DOMAIN}/{paste_id}"
 
@@ -60,13 +73,20 @@ async def post_paste(request: Request):
 async def get_raw_paste(paste_id: str):
     """Get the raw paste content by ID."""
 
-    paste_body = await r.get(paste_id)
+    paste_content = await r.get(paste_id)
 
-    if paste_body is None:
+    if paste_content is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Paste with ID '{paste_id}' not found.",
         )
+
+    paste_content = json.loads(paste_content)
+    paste_body = paste_content.get("body", "")
+
+    if paste_content.get("once", False):
+        # if the paste is a one-time view, delete it after retrieval
+        await r.delete(paste_id)
 
     return paste_body
 
@@ -75,18 +95,25 @@ async def get_raw_paste(paste_id: str):
 async def get_paste(paste_id: str, request: Request):
     """Get the paste content by ID."""
 
-    paste_body = await r.get(paste_id)
+    paste_content = await r.get(paste_id)
     paste_expiry = await r.ttl(paste_id)
 
     # convert seconds to minutes for display
     paste_expiry = paste_expiry // 60  # round down to nearest minute
 
-    if paste_body is None:
+    if paste_content is None:
         return templates.TemplateResponse(
             request=request,
             name="404.html",
             status_code=404,
         )
+
+    paste_content = json.loads(paste_content)
+    paste_body = paste_content.get("body", "")
+
+    if paste_content.get("once", False):
+        # if the paste is a one-time view, delete it after retrieval
+        await r.delete(paste_id)
 
     return templates.TemplateResponse(
         request=request,
