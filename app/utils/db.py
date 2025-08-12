@@ -18,8 +18,8 @@ def get_redis_client():
     """
     if Config.DB_USER and Config.DB_PORT:
         return redis.Redis(
-            host=Config.DB_HOST,
-            port=Config.DB_PORT,
+            host=str(Config.DB_HOST),
+            port=int(Config.DB_PORT),
             username=str(Config.DB_USER),
             password=str(Config.DB_PASS),
             decode_responses=True,
