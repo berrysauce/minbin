@@ -55,7 +55,7 @@ curl https://minb.in -d "hello from the terminal!"
 
 ### self-hosting
 
-minbin can be self-hosted by deploying it as a Docker container [(see GitHub package registry)](https://github.com/berrysauce/minbin/pkgs/container/minbin) or by deploying it on [Railway](https://railway.com?referralCode=xKqS3I) *(referral link)*.
+minbin can be self-hosted by deploying it as a Docker container [(see GitHub package registry)](https://github.com/berrysauce/minbin/pkgs/container/minbin) or by one-click deploying it on [Railway](https://railway.com/deploy/minbin) *(referral link)*.
 
 | Variable         | Description                           | Default            |
 | ---------------- | ------------------------------------- | ------------------ |
