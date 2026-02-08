@@ -220,12 +220,14 @@
                     <div class="modal-content" style="border-radius: 0px!important;">
                         <div class="modal-body">
                             <div class="d-flex flex-row">
-                                <img class="img-fluid modal-qr" id="qrcode" width="110" height="110" src="/assets/img/default-qr.png?h=8b78857e1c1e4f59f1c8925c34f9a987" alt="https://{{ app_domain }}/{{ paste_id }}" style="margin-right: 16px;border: 1px solid rgb(230,230,230);height: 110px;width: 110px;">
+                                <div class="modal-qr" style="margin-right: 16px;border: 1px solid rgb(230,230,230);height: 110px;width: 110px;">
+                                    <div id="qrcode" style="padding: 8px; background: #fff;"></div>
+                                </div>
                                 <script>
                                     var qrcode = new QRCode("qrcode", {
                                         text: "https://{{ app_domain }}/{{ paste_id }}",
-                                        width: 110,
-                                        height: 110,
+                                        width: 94,
+                                        height: 94,
                                         colorDark: "#000000",
                                         colorLight: "#ffffff",
                                         correctLevel: QRCode.CorrectLevel.L,
