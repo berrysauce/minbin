@@ -49,7 +49,7 @@ you can also use minbin from your command line:
 curl --data-binary @example.txt https://minb.in
 
 # share a string
-curl https://minb.in -d "hello from the terminal!"
+curl -d "hello from the terminal!" https://minb.in
 ```
 
 ### self-hosting
