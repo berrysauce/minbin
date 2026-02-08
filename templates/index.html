@@ -1,133 +1,236 @@
 <!DOCTYPE html>
-<html data-bs-theme="light" lang="en" style="background: #000000;">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
-        <title>minbin – the minimal, ephemeral pastebin</title>
-        <link rel="canonical" href="https://minb.in/" />
-        <meta property="og:url" content="https://minb.in/" />
-        <meta name="description" content="minbin is a minimal, privacy-focused pastebin service for sharing plain text or code. it's open source, fast, ephemeral, and without clutter." />
-        <script type="application/ld+json">
-            {
-                "@context": "http://schema.org",
-                "@type": "WebSite",
-                "name": "minbin",
-                "url": "https://minb.in"
-            }
-        </script>
-        <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css?h=945fb3ff8106aaf5eda73c29e0d47826" />
-        <link rel="stylesheet" href="/assets/css/Funnel%20Sans.css?h=944abf0e8f39d2596b82db9dc841d7fc" />
-        <link rel="stylesheet" href="/assets/css/Geist%20Mono.css?h=565175f9bb74ace8ea7c89a0fe742a51" />
-        <link rel="stylesheet" href="/assets/css/styles.css?h=f54fffe3509c589adae6adceedf9959b" />
-    </head>
+<html data-bs-theme="auto" lang="en">
 
-    <body style="height: 100vh; font-family: 'Funnel Sans', sans-serif; background: rgb(0, 0, 0);">
-        <section style="min-height: 100vh; max-width: 100%;">
-            <div class="container d-flex flex-column" style="min-height: 100vh; padding: 0px; margin: 0px; max-width: 100%;">
-                <div class="d-flex flex-row justify-content-center align-items-center" style="padding: 32px;">
-                    <a href="/" aria-label="Home" style="text-decoration: none; color: inherit;">
-                        <img class="img-fluid h-100" width="500" height="102" src="/assets/img/logo-dark.webp?h=040b1ce32533b03380283b282aad47a6" alt="minbin" style="width: 100px; margin-right: 32px;" />
-                    </a>
-                    <div class="text-end flex-grow-1">
-                        <a href="/openapi" class="btn btn-primary" style="padding: 4px 8px; background: rgba(0, 0, 0, 0); border-style: none; border-radius: 0px;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="margin-top: -4px; margin-right: 8px; font-size: 20px;">
-                                <path d="M10 20L14 4M18 8L22 12L18 16M6 16L2 12L6 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                            </svg>
-                            API
-                        </a>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>minbin – the minimal, ephemeral pastebin</title>
+    <link rel="canonical" href="https://minb.in/">
+    <meta property="og:url" content="https://minb.in/">
+    <meta name="description" content="minbin is a minimal, privacy-focused pastebin service for sharing plain text or code. it's open source, fast, ephemeral, and without clutter.">
+    <script type="application/ld+json">
+        {
+            "@context": "http://schema.org",
+            "@type": "WebSite",
+            "name": "minbin",
+            "url": "https://minb.in"
+        }
+    </script>
+    <script>
+        (function() {
+
+            // JavaScript snippet handling Dark/Light mode switching
+
+            const getStoredTheme = () => localStorage.getItem('theme');
+            const setStoredTheme = theme => localStorage.setItem('theme', theme);
+            const forcedTheme = document.documentElement.getAttribute('data-bss-forced-theme');
+
+            const getPreferredTheme = () => {
+
+                if (forcedTheme) return forcedTheme;
+
+                const storedTheme = getStoredTheme();
+                if (storedTheme) {
+                    return storedTheme;
+                }
+
+                const pageTheme = document.documentElement.getAttribute('data-bs-theme');
+
+                if (pageTheme) {
+                    return pageTheme;
+                }
+
+                return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+
+            const setTheme = theme => {
+                if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.setAttribute('data-bs-theme', 'dark');
+                } else {
+                    document.documentElement.setAttribute('data-bs-theme', theme);
+                }
+            }
+
+            setTheme(getPreferredTheme());
+
+            const showActiveTheme = (theme, focus = false) => {
+                const themeSwitchers = [].slice.call(document.querySelectorAll('.theme-switcher'));
+
+                if (!themeSwitchers.length) return;
+
+                document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
+                    element.classList.remove('active');
+                    element.setAttribute('aria-pressed', 'false');
+                });
+
+                for (const themeSwitcher of themeSwitchers) {
+
+                    const btnToActivate = themeSwitcher.querySelector('[data-bs-theme-value="' + theme + '"]');
+
+                    if (btnToActivate) {
+                        btnToActivate.classList.add('active');
+                        btnToActivate.setAttribute('aria-pressed', 'true');
+                    }
+                }
+            }
+
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                const storedTheme = getStoredTheme();
+                if (storedTheme !== 'light' && storedTheme !== 'dark') {
+                    setTheme(getPreferredTheme());
+                }
+            });
+
+            window.addEventListener('DOMContentLoaded', () => {
+                showActiveTheme(getPreferredTheme());
+
+                document.querySelectorAll('[data-bs-theme-value]')
+                    .forEach(toggle => {
+                        toggle.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const theme = toggle.getAttribute('data-bs-theme-value');
+                            setStoredTheme(theme);
+                            setTheme(theme);
+                            showActiveTheme(theme);
+                        })
+                    })
+            });
+        })();
+    </script>
+    <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/assets/img/favicons/apple-touch.png?h=05ff78cd3f23f1833533b36470936c54">
+    <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicons/light/favicon-96x96.png?h=aab7f6b1dff3f7a79389019ae79d6ed8">
+    <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicons/dark/favicon-96x96.png?h=0959b8f09366580649dadcb086f1521d" media="(prefers-color-scheme: dark)">
+    <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicons/light/favicon-96x96.png?h=aab7f6b1dff3f7a79389019ae79d6ed8">
+    <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicons/dark/favicon-96x96.png?h=0959b8f09366580649dadcb086f1521d" media="(prefers-color-scheme: dark)">
+    <link rel="icon" type="image/png" sizes="180x180" href="/assets/img/favicons/apple-touch.png?h=05ff78cd3f23f1833533b36470936c54">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/favicons/light/web-app-manifest-192x192.png?h=cd241a4a369055fc8a06f0d829e0c25a">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/img/favicons/light/web-app-manifest-512x512.png?h=cd241a4a369055fc8a06f0d829e0c25a">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/Geist%20Mono.css?h=440f920163e3ecada6ef9ae34af744c0">
+    <link rel="stylesheet" href="/assets/css/Inter.css?h=aca79172d1cb8d8dba9dfe13145e2f08">
+    <link rel="stylesheet" href="/assets/css/styles.css?h=ce652bf0763ac26d525963e191726e2f">
+</head>
+
+<body style="min-height: 100vh;font-family: Inter, sans-serif;">
+    <section class="py-4 py-xl-5" style="min-height: 100vh;padding: 0px!important;">
+        <form id="main-form">
+            <div class="container d-flex flex-column" style="max-width: 100%;min-height: 100vh;">
+                <div style="padding: 16px 32px!important;">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-3 col-lg-2 d-flex justify-content-center align-items-center justify-content-sm-center justify-content-md-center justify-content-lg-start" style="padding-top: 8px;padding-bottom: 8px;"><a href="/" style="color: inherit;text-decoration: none;"><img class="img-fluid float-start logo-light" src="/assets/img/logo.webp?h=da0d7aa077fd762d4d6cb7b11b426d98" style="height: 24px;" alt="minbin"><img class="img-fluid float-start logo-dark" src="/assets/img/logo-dark.webp?h=407f49ea880ff9a581f5b27f9411567b" style="height: 24px;" alt="minbin"></a></div>
+                        <div class="col d-flex justify-content-center align-items-center justify-content-sm-center justify-content-md-end" style="padding-top: 8px;padding-bottom: 0px;">
+                            <div class="text-center d-flex float-md-end justify-content-center align-items-center flex-wrap" style="margin-top: 3px;margin-bottom: -3px;">
+                                <!--
+                                <div class="d-flex justify-content-center align-items-center flex-sm-grow-1 flex-lg-grow-0 navbar-divider">
+                                    <div class="form-check form-switch"><input class="form-check-input shadow-none" type="checkbox" id="formCheck-1" style="margin-top: 6px;"><label class="form-check-label" for="formCheck-1" style="font-size: 14px;font-weight: 500;">one-time view</label></div>
+                                </div>
+                                -->
+                                <div class="d-flex justify-content-center align-items-center flex-sm-grow-1 flex-lg-grow-0 navbar-divider">
+                                    <button class="btn" id="paste-button" type="button" style="min-width: 85px;height: 29px;margin-right: 8px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="margin-top: -2px;font-size: 16px;margin-right: 6px;">
+                                            <path d="M15.1716 7L8.58579 13.5858C7.80474 14.3668 7.80474 15.6332 8.58579 16.4142C9.36684 17.1953 10.6332 17.1953 11.4142 16.4142L17.8284 9.82843C19.3905 8.26633 19.3905 5.73367 17.8284 4.17157C16.2663 2.60948 13.7337 2.60948 12.1716 4.17157L5.75736 10.7574C3.41421 13.1005 3.41421 16.8995 5.75736 19.2426C8.1005 21.5858 11.8995 21.5858 14.2426 19.2426L20.5 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        </svg>paste
+                                    </button>
+                                    <button class="btn" type="submit" style="min-width: 100px;height: 29px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20" fill="none" style="margin-top: -2px;font-size: 16px;margin-right: 6px;">
+                                            <path d="M10.8944 2.55279C10.725 2.214 10.3788 2 10 2C9.62124 2 9.27498 2.214 9.10558 2.55279L2.10558 16.5528C1.92823 16.9075 1.97724 17.3335 2.2305 17.6386C2.48376 17.9438 2.89342 18.0705 3.27473 17.9615L8.27472 16.533C8.70402 16.4103 9 16.0179 9 15.5714V11C9 10.4477 9.44772 10 10 10C10.5523 10 11 10.4477 11 11V15.5714C11 16.0179 11.296 16.4103 11.7253 16.533L16.7253 17.9615C17.1066 18.0705 17.5163 17.9438 17.7695 17.6386C18.0228 17.3335 18.0718 16.9075 17.8944 16.5528L10.8944 2.55279Z" fill="currentColor"></path>
+                                        </svg>publish
+                                    </button>
+                                </div>
+                                <div class="d-flex justify-content-center align-items-center flex-sm-grow-1 flex-lg-grow-0" style="margin-bottom: 8px;height: 36px;margin-top: -5px;">
+                                    <div class="theme-switcher dropdown" style="font-size: 12px;width: 42px;margin-right: 8px;">
+                                        <button class="btn btn-link" aria-expanded="false" data-bs-toggle="dropdown" type="button" style="color: var(--bs-body-color);height: 29px;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20" fill="none" class="mb-1" style="margin-top: 1px;font-size: 16px;">
+                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M10 2C10.5523 2 11 2.44772 11 3V4C11 4.55228 10.5523 5 10 5C9.44772 5 9 4.55228 9 4V3C9 2.44772 9.44772 2 10 2ZM14 10C14 12.2091 12.2091 14 10 14C7.79086 14 6 12.2091 6 10C6 7.79086 7.79086 6 10 6C12.2091 6 14 7.79086 14 10ZM13.5356 14.9497L14.2427 15.6568C14.6332 16.0473 15.2664 16.0473 15.6569 15.6568C16.0474 15.2663 16.0474 14.6331 15.6569 14.2426L14.9498 13.5355C14.5593 13.145 13.9261 13.145 13.5356 13.5355C13.1451 13.926 13.1451 14.5592 13.5356 14.9497ZM15.6568 4.34309C16.0473 4.73362 16.0473 5.36678 15.6568 5.75731L14.9497 6.46441C14.5592 6.85494 13.926 6.85494 13.5355 6.46441C13.145 6.07389 13.145 5.44072 13.5355 5.0502L14.2426 4.34309C14.6331 3.95257 15.2663 3.95257 15.6568 4.34309ZM17 11C17.5523 11 18 10.5523 18 10C18 9.44772 17.5523 9 17 9H16C15.4477 9 15 9.44772 15 10C15 10.5523 15.4477 11 16 11H17ZM10 15C10.5523 15 11 15.4477 11 16V17C11 17.5523 10.5523 18 10 18C9.44772 18 9 17.5523 9 17V16C9 15.4477 9.44772 15 10 15ZM5.05031 6.46443C5.44083 6.85496 6.074 6.85496 6.46452 6.46443C6.85505 6.07391 6.85505 5.44074 6.46452 5.05022L5.75742 4.34311C5.36689 3.95259 4.73373 3.95259 4.3432 4.34311C3.95268 4.73363 3.95268 5.3668 4.3432 5.75732L5.05031 6.46443ZM6.46443 14.9497L5.75732 15.6568C5.3668 16.0473 4.73363 16.0473 4.34311 15.6568C3.95259 15.2663 3.95259 14.6331 4.34311 14.2426L5.05022 13.5355C5.44074 13.145 6.07391 13.145 6.46443 13.5355C6.85496 13.926 6.85496 14.5592 6.46443 14.9497ZM4 11C4.55228 11 5 10.5523 5 10C5 9.44772 4.55228 9 4 9H3C2.44772 9 2 9.44772 2 10C2 10.5523 2.44772 11 3 11H4Z" fill="currentColor"></path>
+                                            </svg>
+                                        </button>
+                                        <div class="dropdown-menu" style="border-radius: 0px;border: 1px solid rgb(230,230,230);font-size: 14px;margin-top: 8px;padding: 0px!important;">
+                                            <a class="dropdown-item d-flex align-items-center" href="#" data-bs-theme-value="light" style="padding: 10px 12px;height: 42px;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20" fill="none" class="opacity-50 me-2" style="font-size: 16px;margin-top: 2px;">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M10 2C10.5523 2 11 2.44772 11 3V4C11 4.55228 10.5523 5 10 5C9.44772 5 9 4.55228 9 4V3C9 2.44772 9.44772 2 10 2ZM14 10C14 12.2091 12.2091 14 10 14C7.79086 14 6 12.2091 6 10C6 7.79086 7.79086 6 10 6C12.2091 6 14 7.79086 14 10ZM13.5356 14.9497L14.2427 15.6568C14.6332 16.0473 15.2664 16.0473 15.6569 15.6568C16.0474 15.2663 16.0474 14.6331 15.6569 14.2426L14.9498 13.5355C14.5593 13.145 13.9261 13.145 13.5356 13.5355C13.1451 13.926 13.1451 14.5592 13.5356 14.9497ZM15.6568 4.34309C16.0473 4.73362 16.0473 5.36678 15.6568 5.75731L14.9497 6.46441C14.5592 6.85494 13.926 6.85494 13.5355 6.46441C13.145 6.07389 13.145 5.44072 13.5355 5.0502L14.2426 4.34309C14.6331 3.95257 15.2663 3.95257 15.6568 4.34309ZM17 11C17.5523 11 18 10.5523 18 10C18 9.44772 17.5523 9 17 9H16C15.4477 9 15 9.44772 15 10C15 10.5523 15.4477 11 16 11H17ZM10 15C10.5523 15 11 15.4477 11 16V17C11 17.5523 10.5523 18 10 18C9.44772 18 9 17.5523 9 17V16C9 15.4477 9.44772 15 10 15ZM5.05031 6.46443C5.44083 6.85496 6.074 6.85496 6.46452 6.46443C6.85505 6.07391 6.85505 5.44074 6.46452 5.05022L5.75742 4.34311C5.36689 3.95259 4.73373 3.95259 4.3432 4.34311C3.95268 4.73363 3.95268 5.3668 4.3432 5.75732L5.05031 6.46443ZM6.46443 14.9497L5.75732 15.6568C5.3668 16.0473 4.73363 16.0473 4.34311 15.6568C3.95259 15.2663 3.95259 14.6331 4.34311 14.2426L5.05022 13.5355C5.44074 13.145 6.07391 13.145 6.46443 13.5355C6.85496 13.926 6.85496 14.5592 6.46443 14.9497ZM4 11C4.55228 11 5 10.5523 5 10C5 9.44772 4.55228 9 4 9H3C2.44772 9 2 9.44772 2 10C2 10.5523 2.44772 11 3 11H4Z" fill="currentColor"></path>
+                                                </svg>light
+                                            </a>
+                                            <a class="dropdown-item d-flex align-items-center" href="#" data-bs-theme-value="dark" style="padding: 10px 12px;height: 42px;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20" fill="none" class="opacity-50 me-2" style="font-size: 16px;margin-top: 2px;">
+                                                    <path d="M17.2929 13.2929C16.2886 13.7471 15.1738 13.9999 14 13.9999C9.58172 13.9999 6 10.4182 6 5.9999C6 4.82593 6.25287 3.71102 6.70712 2.70667C3.93137 3.96191 2 6.75526 2 9.9997C2 14.418 5.58172 17.9997 10 17.9997C13.2443 17.9997 16.0376 16.0685 17.2929 13.2929Z" fill="currentColor"></path>
+                                                </svg>dark
+                                            </a>
+                                            <a class="dropdown-item d-flex align-items-center" href="#" data-bs-theme-value="auto" style="padding: 10px 12px;height: 42px;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20" fill="none" class="opacity-50 me-2" style="font-size: 16px;margin-top: 2px;">
+                                                    <path d="M8 5C7.44772 5 7 5.44771 7 6C7 6.55228 7.44772 7 8 7L13.5858 7L12.2929 8.29289C11.9024 8.68342 11.9024 9.31658 12.2929 9.70711C12.6834 10.0976 13.3166 10.0976 13.7071 9.70711L16.7071 6.70711C16.8946 6.51957 17 6.26522 17 6C17 5.73478 16.8946 5.48043 16.7071 5.29289L13.7071 2.29289C13.3166 1.90237 12.6834 1.90237 12.2929 2.29289C11.9024 2.68342 11.9024 3.31658 12.2929 3.70711L13.5858 5L8 5Z" fill="currentColor"></path>
+                                                    <path d="M12 15C12.5523 15 13 14.5523 13 14C13 13.4477 12.5523 13 12 13L6.41421 13L7.70711 11.7071C8.09763 11.3166 8.09763 10.6834 7.70711 10.2929C7.31658 9.90237 6.68342 9.90237 6.29289 10.2929L3.29289 13.2929C3.10536 13.4804 3 13.7348 3 14C3 14.2652 3.10536 14.5196 3.29289 14.7071L6.29289 17.7071C6.68342 18.0976 7.31658 18.0976 7.70711 17.7071C8.09763 17.3166 8.09763 16.6834 7.70711 16.2929L6.41421 15L12 15Z" fill="currentColor"></path>
+                                                </svg>auto
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <a class="btn" href="https://minb.in/openapi" role="button" style="margin-right: 8px;min-width: 69px;height: 29px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="margin-top: -2px;font-size: 16px;margin-right: 6px;">
+                                            <path d="M10 20L14 4M18 8L22 12L18 16M6 16L2 12L6 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        </svg>api
+                                    </a>
+                                    <a class="btn" href="https://github.com/berrysauce/minbin" target="_blank" role="button" style="min-width: 92px;height: 29px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="-8 0 512 512" width="1em" height="1em" fill="currentColor" style="margin-top: -2px;font-size: 16px;margin-right: 6px;">
+                                            <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. -->
+                                            <path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path>
+                                        </svg>github
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="d-flex flex-column flex-grow-1" style="padding: 0px 32px;">
-                    <form class="d-flex flex-column flex-grow-1" id="paste-form" style="background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 0px;">
-                        <textarea
-                            class="form-control z-0 flex-grow-1 scrollable custom-placeholder"
-                            id="paste-content"
-                            style="resize: none; font-family: 'Geist Mono', monospace; padding: 16px; background: rgba(0, 0, 0, 0); box-shadow: none; outline: none; color: rgb(255, 255, 255); border-style: none;"
-                            placeholder="paste or type here..."
-                        ></textarea>
-                        <div class="text-end z-1" style="margin-bottom: -2px; margin-right: -2px; margin-top: -48px;">
-                            <button
-                                class="btn btn-primary text-end"
-                                id="paste-button"
-                                type="button"
-                                style="background: rgb(13, 13, 13); border-radius: 0px; padding: 12px 24px; margin-right: -4px; color: rgba(255, 255, 255, 0.5); font-weight: 500; border: 2px solid rgba(255, 255, 255, 0.1);"
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20" fill="none" style="margin-top: -4px; margin-right: 8px; font-size: 20px;">
-                                    <path
-                                        fill-rule="evenodd"
-                                        clip-rule="evenodd"
-                                        d="M8 4C6.34315 4 5 5.34315 5 7V11C5 13.7614 7.23858 16 10 16C12.7614 16 15 13.7614 15 11V7C15 6.44772 15.4477 6 16 6C16.5523 6 17 6.44772 17 7V11C17 14.866 13.866 18 10 18C6.13401 18 3 14.866 3 11V7C3 4.23858 5.23858 2 8 2C10.7614 2 13 4.23858 13 7V11C13 12.6569 11.6569 14 10 14C8.34315 14 7 12.6569 7 11V7C7 6.44772 7.44772 6 8 6C8.55228 6 9 6.44772 9 7V11C9 11.5523 9.44772 12 10 12C10.5523 12 11 11.5523 11 11V7C11 5.34315 9.65685 4 8 4Z"
-                                        fill="currentColor"
-                                    ></path>
-                                </svg>
-                                Paste
-                            </button>
-                            <button
-                                class="btn btn-primary text-end"
-                                type="submit"
-                                style="background: rgb(13, 13, 13); border-radius: 0px; padding: 12px 24px; color: rgb(255, 255, 255); font-weight: 500; margin-left: -2px; border: 2px solid rgba(255, 255, 255, 0.1);"
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20" fill="none" style="margin-top: -4px; margin-right: 8px; font-size: 20px;">
-                                    <path
-                                        d="M10.8944 2.55279C10.725 2.214 10.3788 2 10 2C9.62124 2 9.27498 2.214 9.10558 2.55279L2.10558 16.5528C1.92823 16.9075 1.97724 17.3335 2.2305 17.6386C2.48376 17.9438 2.89342 18.0705 3.27473 17.9615L8.27472 16.533C8.70402 16.4103 9 16.0179 9 15.5714V11C9 10.4477 9.44772 10 10 10C10.5523 10 11 10.4477 11 11V15.5714C11 16.0179 11.296 16.4103 11.7253 16.533L16.7253 17.9615C17.1066 18.0705 17.5163 17.9438 17.7695 17.6386C18.0228 17.3335 18.0718 16.9075 17.8944 16.5528L10.8944 2.55279Z"
-                                        fill="currentColor"
-                                    ></path>
-                                </svg>
-                                Publish
-                            </button>
-                            <script>
-                                const button = document.getElementById("paste-button");
-                                const textarea = document.getElementById("paste-content");
-
-                                button.addEventListener("click", async () => {
-                                    try {
-                                        const text = await navigator.clipboard.readText();
-                                        textarea.value = text;
-                                    } catch (err) {
-                                        console.error("Clipboard paste failed:", err);
-                                    }
-                                });
-                            </script>
-                        </div>
+                <div class="d-flex flex-column flex-grow-1" style="height: 100%;padding: 0px 32px!important;">
+                    <form class="d-flex flex-column flex-grow-1">
+                        <textarea class="shadow-none focus-ring z-0 flex-grow-1 scrollable custom-placeholder textarea" id="paste-content" style="resize: none;font-family: 'Geist Mono', monospace;font-size: 14px;" placeholder="paste or type here..."></textarea>
                     </form>
                     <script>
-                        document.addEventListener("DOMContentLoaded", () => {
-                            document.getElementById("paste-form").addEventListener("submit", async (e) => {
-                                e.preventDefault();
-                                const text = document.getElementById("paste-content").value;
+                        // handle paste button
 
-                                const response = await fetch("/", {
-                                    method: "POST",
-                                    headers: {
-                                        "Content-Type": "text/plain",
-                                    },
-                                    body: text,
-                                });
+                        const paste_button = document.getElementById("paste-button");
+                        const paste_textarea = document.getElementById("paste-content");
 
-                                if (response.status == 201) {
-                                    // http success (created)
-                                    const result = await response.text();
-                                    window.location.replace("https://" + result);
-                                }
-                            });
+                        paste_button.addEventListener("click", async () => {
+                            try {
+                                const text = await navigator.clipboard.readText();
+                                paste_textarea.value = text;
+                            } catch (err) {
+                                console.error("Clipboard paste failed:", err);
+                            }
                         });
                     </script>
                 </div>
-                <div style="padding: 32px;">
-                    <p style="margin-bottom: 16px; font-size: 14px; color: rgba(255, 255, 255, 0.3);">
-                        <span style="font-weight: 500; color: rgb(255, 255, 255);">minbin is a minimal, ephemeral pastebin service.</span>&nbsp;
-                        <span>created by <a href="https://berrysauce.dev" style="color: inherit;" target="_blank">berrysauce</a>.</span><br />
-                        this service is provided as is, with no guarantees. do not use it to store illegal, sensitive, personal, or confidential information. the operator is not responsible for user-submitted content.<br />
-                        no personal data is collected. pastes are anonymous and auto-delete after 1 hour. by using this service, you agree to these terms.
-                    </p>
-                    <p style="margin-bottom: 0px; font-size: 14px; color: rgba(255, 255, 255, 0.3);">
-                        <span style="font-weight: 500; color: rgb(255, 255, 255);">
-                            <img class="img-fluid" src="/assets/img/eu.webp?h=a722428543558d4a0580ae0befc34ecd" alt="EU" style="height: 20px; margin-top: -2px; margin-right: 10px; box-shadow: 0px 0px 20px 0px rgb(1, 51, 153);" />Hosted in Europe
-                        </span>
-                    </p>
+                <div style="padding: 32px!important;">
+                    <p class="footer-text" style="margin-bottom: 16px;font-size: 12px;color: rgba(33,37,41,0.5);"><span class="footer-text" style="font-weight: 500;color: rgb(33,37,41);">minbin is a minimal, ephemeral pastebin service.</span>&nbsp;created by&nbsp;<a href="https://berrysauce.dev/?ref=minbin" style="color: inherit;" target="_blank">berrysauce</a>.<span class="float-lg-end footer-text" style="font-weight: 500;color: rgb(33,37,41);"><img class="img-fluid" src="/assets/img/eu.webp?h=a722428543558d4a0580ae0befc34ecd" style="height: 16px;margin-top: -3px;margin-right: 8px;margin-left: 6px;">made and hosted in europe.</span></p>
+                    <p class="footer-text" style="margin-bottom: 0px;font-size: 12px;color: rgba(33,37,41,0.5);max-width: 1000px;">this service is provided as is, with no guarantees. do not use it to store illegal, sensitive, personal, or confidential information. the operator is not responsible for user-submitted content. no personal data is collected. pastes are anonymous and auto-delete after 1 hour. by using this service, you agree to these terms. minbin is licensed under the <a href="https://github.com/berrysauce/minbin/blob/main/LICENSE" style="color: inherit;">GNU General Public License v3.0</a>.</p>
                 </div>
             </div>
-        </section>
-        <script src="/assets/bootstrap/js/bootstrap.min.js?h=2cf0875e1daf356bc4e64c053e7a4150"></script>
-    </body>
+        </form>
+        <script>
+            // handle form submission
+
+            document.addEventListener("DOMContentLoaded", () => {
+                document.getElementById("main-form").addEventListener("submit", async (e) => {
+                    e.preventDefault();
+                    const text = document.getElementById("paste-content").value;
+
+                    const response = await fetch("/?relative=true", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "text/plain",
+                        },
+                        body: text,
+                    });
+
+                    if (response.status == 201) {
+                        // http success (created)
+                        const result = await response.text();
+                        window.location.replace("/" + result.trim() + "?party=1");
+                    }
+                });
+            });
+        </script>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
 </html>

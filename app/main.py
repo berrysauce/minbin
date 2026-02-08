@@ -44,6 +44,10 @@ async def post_paste(
         default=None,
         description="If true, the paste will self-destruct after one view.",
     ),
+    relative: Optional[bool] = Query(
+        default=False,
+        description="If true, only return the paste ID instead of the full URL.",
+    ),
 ):
     """Create a new paste."""
 
@@ -65,6 +69,9 @@ async def post_paste(
         }
     )
     await r.set(paste_id, paste_content, ex=paste_expiry)
+
+    if relative:
+        return paste_id
 
     return f"{Config.APP_DOMAIN}/{paste_id}"
 
@@ -98,9 +105,6 @@ async def get_paste(paste_id: str, request: Request):
     paste_content = await r.get(paste_id)
     paste_expiry = await r.ttl(paste_id)
 
-    # convert seconds to minutes for display
-    paste_expiry = paste_expiry // 60  # round down to nearest minute
-
     if paste_content is None:
         return templates.TemplateResponse(
             request=request,
@@ -120,8 +124,8 @@ async def get_paste(paste_id: str, request: Request):
         name="paste.html",
         context={
             "paste_id": paste_id,
-            "paste_url": f"{Config.APP_DOMAIN}/{paste_id}",
             "paste_body": paste_body,
             "paste_expiry": paste_expiry,
+            "app_domain": Config.APP_DOMAIN,
         },
     )
