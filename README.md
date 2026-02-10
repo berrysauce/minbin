@@ -22,7 +22,7 @@ pastes expire automatically after 1 hour, or immediately after being viewed (opt
 
 **→ check it out at [minb.in](https://minb.in/)**
 
-<br>
+<img alt="Showcase" src="https://berrycdn.com/brand/minbin/screenshare-showcase.gif">
 
 ### features
 
